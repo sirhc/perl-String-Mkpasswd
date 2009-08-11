@@ -1,0 +1,13 @@
+Changes
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+README
+bin/mkpasswd.pl
+lib/String/MkPasswd.pm
+perl-String-MkPasswd.spec
+t/01use.t
+t/02length.t
+t/03count.t
+t/04fatal.t
+META.yml                                 Module meta-data (added by MakeMaker)

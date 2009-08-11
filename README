@@ -1,0 +1,43 @@
+String-MkPasswd version 0.01
+============================
+
+This Perl library defines a single function, mkpasswd(), to generate
+random passwords.  The function is meant to be a simple way for
+developers and system administrators to easily generate a relatively
+secure password.
+
+Also included in this distribution is the example program
+mkpasswd.pl(3pm) and a .spec file for RPM builders.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  File::Basename
+  Getopt::Long
+  Test::More
+  Text::Wrap
+
+All of these are included with recent versions of Perl.
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2003 by Chris Grau
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.1 or,
+at your option, any later version of Perl 5 you may have available.
+
+AKNOWLEDGEMENTS
+
+Don Libes of the National Institute of Standards and Technology, who
+wrote the Expect example, L<mkpasswd(1)>.

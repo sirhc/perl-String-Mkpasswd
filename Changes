@@ -1,0 +1,6 @@
+Revision history for Perl extension String::MkPasswd.
+
+0.01  Wed Nov 12 17:29:08 2003
+	- original version; created by h2xs 1.23 with options
+		--compat-version=5.6.1 --omit-autoload --omit-XS --name=String::MkPasswd --use-new-tests
+

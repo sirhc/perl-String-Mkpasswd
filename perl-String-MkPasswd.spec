@@ -7,9 +7,9 @@
 %define __find_provides /usr/lib/rpm/find-provides.perl
 %define __find_requires /usr/lib/rpm/find-requires.perl
 
-Summary: the String::MkPasswd module
+Summary: A random password generator for Perl 5.
 Name: perl-%{module}
-Version: 0.01
+Version: 0.02
 Release: 1
 URL: http://search.cpan.org/search?query=%{query}
 License: Artistic
@@ -28,7 +28,12 @@ BuildPrereq: perl(Getopt::Long)
 BuildPrereq: perl(Text::Wrap)
 
 %description
-The String::MkPasswd module.
+The String::MkPasswd module provides the mkpasswd() function which, by
+default, will return a fairly secure password.  The number of letters,
+numbers and special characters in the password can be customized.
+
+The mkpasswd.pl program is also included as a front-end to the
+mkpasswd() function.
 
 %prep
 %setup -q -n %{module}-%{version} 
@@ -55,5 +60,12 @@ The String::MkPasswd module.
 %{_mandir}/*/*
 
 %changelog
-* Thu Nov 13 2003 Chris Grau <rpm@sirhc.us>
+* Wed Mar 17 2004 Chris Grau <cgrau@cpan.org> 0.02-1
+- Applied changes from Adrian Gee <adrian.gee@anu.edu.au> allowing
+  -minnum, -minlower, -minupper and -minspecial to be zero in the call
+  to mkpasswd().
+- Added --no{num,lower,upper,special} options to mkpasswd.pl as
+  alternatives to --min{num,lower,upper,special}=0.
+
+* Thu Nov 13 2003 Chris Grau <cgrau@cpan.org> 0.01-1
 - Initial .spec file generation.

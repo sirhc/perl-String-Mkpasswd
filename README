@@ -1,4 +1,4 @@
-String-MkPasswd version 0.01
+String-MkPasswd version 0.02
 ============================
 
 This Perl library defines a single function, mkpasswd(), to generate
@@ -31,11 +31,11 @@ All of these are included with recent versions of Perl.
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2003 by Chris Grau
+Copyright (C) 2003-2004 by Chris Grau
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.1 or,
-at your option, any later version of Perl 5 you may have available.
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself, either Perl version 5.8.1 or, at
+your option, any later version of Perl 5 you may have available.
 
 AKNOWLEDGEMENTS
 

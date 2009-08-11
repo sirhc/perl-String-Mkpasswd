@@ -40,6 +40,13 @@ my $getopt = GetOptions(
 	#"verbose|v"		=> \$verbose,
 	#"passwd|p"		=> \$passwd,
 	"help|h"		=> \$help,
+
+	# Getopt::Long doesn't support combining '--no' with options that take
+	# arguments, so this is just my way of faking it.
+	"nodigits|no-digits"	=> sub { $minnum = 0 },
+	"nolower|no-lower"		=> sub { $minlower = 0 },
+	"noupper|no-upper"		=> sub { $minupper = 0 },
+	"nospecial|no-special"	=> sub { $minspecial = 0 },
 );
 
 if ( $help ) {
@@ -54,10 +61,10 @@ if ( !$getopt ) {
 
 my $pass = mkpasswd(
 	-length		=> $length,
-	-digits		=> $minnum,
-	-lower		=> $minlower,
-	-upper		=> $minupper,
-	-special	=> $minspecial,
+	-minnum		=> $minnum,
+	-minlower	=> $minlower,
+	-minupper	=> $minupper,
+	-minspecial	=> $minspecial,
 	-distribute	=> $distribute,
 );
 
@@ -83,6 +90,10 @@ Usage: @{[ basename $0 ]} [-options]
     -C # | --upper=#    min # of uppercase chars (default = @{[ MINUPPER ]})
     -s # | --special=#  min # of special chars (default = @{[ MINSPECIAL ]})
     -2 | --distribute   alternate hands
+	--nodigits          alias for --digits=0
+	--nolower           alias for --lower=0
+	--noupper           alias for --upper=0
+	--nospecial         alias for --upper=0
 EOF
 }
 
@@ -138,6 +149,22 @@ If specified, password characters will be distributed between the left-
 and right-hand sides of the keyboard.  This makes it more difficult for
 an onlooker to see the password as it is typed.
 
+=item --nodigits | --no-digits
+
+Alias for --digits=0.
+
+=item --nolower | --no-lower
+
+Alias for --lower=0.
+
+=item --noupper | --no-upper
+
+Alias for --upper=0.
+
+=item --nospecial | --no-special
+
+Alias for --special=0.
+
 =back
 
 =head1 BUGS
@@ -146,8 +173,8 @@ an onlooker to see the password as it is typed.
 
 =item *
 
-The .pl extension has been added to avoid conflict with the program of
-the same name distributed with Expect.
+While not really a bug, the .pl extension has been added to avoid
+conflict with the program of the same name distributed with Expect.
 
 =back
 
@@ -179,7 +206,7 @@ Chris Grau E<lt>cgrau@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003 by Chris Grau
+Copyright (C) 2003-2004 by Chris Grau
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself, either Perl version 5.8.1 or, at

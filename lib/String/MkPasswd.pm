@@ -19,7 +19,7 @@ our %EXPORT_TAGS = (
 	all	=> [ qw(mkpasswd) ],
 );
 our @EXPORT_OK = @{ $EXPORT_TAGS{all} };
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 our $FATAL = "";
 
 my %keys = (
@@ -60,10 +60,18 @@ sub mkpasswd {
 
 	# Configuration.
 	my $length		= $args{"-length"}     || LENGTH;
-	my $minnum		= $args{"-minnum"}     || MINNUM;
-	my $minlower	= $args{"-minlower"}   || MINLOWER;
-	my $minupper	= $args{"-minupper"}   || MINUPPER;
-	my $minspecial	= $args{"-minspecial"} || MINSPECIAL;
+	my $minnum		= defined $args{"-minnum"}
+		? $args{"-minnum"}
+		: MINNUM;
+	my $minlower	= defined $args{"-minlower"}
+		? $args{"-minlower"}
+		: MINLOWER;
+	my $minupper	= defined $args{"-minupper"}
+		? $args{"-minupper"}
+		: MINUPPER;
+	my $minspecial	= defined $args{"-minspecial"}
+		? $args{"-minspecial"}
+		: MINSPECIAL;
 	my $distribute	= defined $args{"-distribute"}
 		? $args{"-distribute"}
 		: DISTRIBUTE;
@@ -294,7 +302,7 @@ Chris Grau E<lt>cgrau@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003 by Chris Grau
+Copyright (C) 2003-2004 by Chris Grau
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself, either Perl version 5.8.1 or, at

@@ -14,7 +14,7 @@ WriteMakefile(
 	($] >= 5.005
 		? (
 			ABSTRACT_FROM	=> "lib/String/MkPasswd.pm",
-			AUTHOR			=> "Chris Grau <cpan\@sirhc.us>",
+			AUTHOR			=> "Chris Grau <cgrau\@cpan.org>",
 		)
 		: ()
 	),

@@ -1,4 +1,10 @@
-Revision history for Perl extension String::MkPasswd.
+Revision history for String::MkPasswd
+
+0.03  Sun Oct 17 22:27:20 PDT 2010
+    - Documentation fix for the --nospecial option in mkpasswd.pl.
+      <https://rt.cpan.org/Ticket/Display.html?id=50183>
+    - Removed MANIFEST.SKIP and RPM spec files.
+    - Added Build.PL, cleaned up Makefile.PL and README.
 
 0.02  Wed Mar 17 08:17:10 PST 2004
     - Applied changes from Adrian Gee <adrian.gee@anu.edu.au> allowing -minnum,

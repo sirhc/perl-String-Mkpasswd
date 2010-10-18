@@ -19,7 +19,7 @@ our %EXPORT_TAGS = (
 	all	=> [ qw(mkpasswd) ],
 );
 our @EXPORT_OK = @{ $EXPORT_TAGS{all} };
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 our $FATAL = "";
 
 my %keys = (
@@ -302,7 +302,7 @@ Chris Grau E<lt>cgrau@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2003-2004 by Chris Grau
+Copyright (C) 2003-2010 by Chris Grau
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself, either Perl version 5.8.1 or, at

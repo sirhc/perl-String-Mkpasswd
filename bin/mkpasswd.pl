@@ -93,7 +93,7 @@ Usage: @{[ basename $0 ]} [-options]
 	--nodigits          alias for --digits=0
 	--nolower           alias for --lower=0
 	--noupper           alias for --upper=0
-	--nospecial         alias for --upper=0
+	--nospecial         alias for --special=0
 EOF
 }
 

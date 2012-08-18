@@ -1,5 +1,8 @@
 Revision history for String::MkPasswd
 
+0.04  Fri Aug 17 17:45:59 PDT 2012
+    - Use Dist::Zilla <https://rt.cpan.org/Ticket/Display.html?id=78952>
+
 0.03  Sun Oct 17 22:27:20 PDT 2010
     - Documentation fix for the --nospecial option in mkpasswd.pl.
       <https://rt.cpan.org/Ticket/Display.html?id=50183>

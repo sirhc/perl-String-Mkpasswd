@@ -1,7 +1,7 @@
 use Test::More tests => 3;
 
 use constant ITERATIONS => 100; # sufficiently large to overcome probability
-our $AMBIGUOUS = 'o01il|_\-.,:;\[\](){}'; # keys of String::MkPasswd::IS_AMBIGUOUS in regex form
+our $AMBIGUOUS = 'o01ilvwc|_\-.,:;\[\](){}'; # keys of String::MkPasswd::IS_AMBIGUOUS in regex form
 
 BEGIN { use_ok('String::MkPasswd') };
 

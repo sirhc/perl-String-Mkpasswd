@@ -15,6 +15,7 @@ use constant MINLOWER	=> 2;
 use constant MINUPPER	=> 2;
 use constant MINSPECIAL	=> 1;
 use constant DISTRIBUTE	=> "";
+use constant NOAMBIGUOUS	=> 0;
 #use constant VERBOSE	=> "";
 #use constant PASSWD		=> "/bin/passwd";
 
@@ -25,6 +26,7 @@ my $minlower	= MINLOWER;
 my $minupper	= MINUPPER;
 my $minspecial	= MINSPECIAL;
 my $distribute	= DISTRIBUTE;
+my $noambiguous	= NOAMBIGUOUS;
 #my $verbose	= VERBOSE;
 #my $passwd		= PASSWD;
 my $help		= "";
@@ -37,6 +39,7 @@ my $getopt = GetOptions(
 	"upper|C=i"		=> \$minupper,
 	"special|s=i"	=> \$minspecial,
 	"distribute|2"	=> \$distribute,
+	"noambiguous|n"	=> \$noambiguous,
 	#"verbose|v"		=> \$verbose,
 	#"passwd|p"		=> \$passwd,
 	"help|h"		=> \$help,
@@ -47,6 +50,7 @@ my $getopt = GetOptions(
 	"nolower|no-lower"		=> sub { $minlower = 0 },
 	"noupper|no-upper"		=> sub { $minupper = 0 },
 	"nospecial|no-special"	=> sub { $minspecial = 0 },
+	"noambiguous|no-ambiguous|no-lookalike|nolookalike" => sub { $noambiguous = 1 },
 );
 
 if ( $help ) {
@@ -66,6 +70,7 @@ my $pass = mkpasswd(
 	-minupper	=> $minupper,
 	-minspecial	=> $minspecial,
 	-distribute	=> $distribute,
+	-noambiguous	=> $noambiguous,
 );
 
 if ( !$pass ) {
@@ -90,10 +95,12 @@ Usage: @{[ basename $0 ]} [-options]
     -C # | --upper=#    min # of uppercase chars (default = @{[ MINUPPER ]})
     -s # | --special=#  min # of special chars (default = @{[ MINSPECIAL ]})
     -2 | --distribute   alternate hands
+    -n | --noambiguous  don't include chars that might be mistaken for others
 	--nodigits          alias for --digits=0
 	--nolower           alias for --lower=0
 	--noupper           alias for --upper=0
 	--nospecial         alias for --special=0
+	--nolookalike       alias for --noambiguous
 EOF
 }
 

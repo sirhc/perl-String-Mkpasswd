@@ -1,5 +1,9 @@
 Revision history for String::MkPasswd
 
+0.05  Sun Oct 20 05:24:38 PDT 2013
+    - Added option to disallow ambiguious characters in passwords (thanks
+      Jacob Rose) <https://github.com/sirhc/string-mkpasswd/pull/1>.
+
 0.04  Fri Aug 17 17:45:59 PDT 2012
     - Use Dist::Zilla <https://rt.cpan.org/Ticket/Display.html?id=78952>
 

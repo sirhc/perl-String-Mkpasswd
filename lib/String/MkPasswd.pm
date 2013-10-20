@@ -15,44 +15,87 @@ use constant MINSPECIAL	=> 1;
 use constant DISTRIBUTE	=> "";
 use constant FATAL		=> "";
 
+# A few conveniences for dealing with homographs
+use constant ALLOWAMBIGUOUS => 0;
+use constant NOAMBIGUOUS    => 1;
+our %IS_AMBIGUOUS = (
+	'o' => 1, # easily confused with zero, especially when capitalized
+	'0' => 1, # easily confused with capital O
+	'1' => 1, # easily confused for lower l or capital I
+	'i' => 1, # especially when capitalized, easily confused for 1, lower l, or pipe
+	'l' => 1, # easily confused for 1 or capital I
+	'v' => 1, # a pair of these looks like w
+	'w' => 1, # one of these looks like a pair of v's
+	'c' => 1, # can be confused for a paren
+	'|' => 1, # easily confused with 1, lower l, or capital I
+	'_' => 1, # easily confused with dash
+	'-' => 1, # easily confused with underscore
+	'.' => 1, # easily confused with comma
+	',' => 1, # easily confused with period
+	':' => 1, # easily confused with colon
+	';' => 1, # easily confused with semicolon
+	']' => 1, # easily confused with } and )
+	'[' => 1, # easily confused with { and (
+	'(' => 1, # easily confused with { and [
+	')' => 1, # easily confused with } and ]
+	'{' => 1, # easily confused with ( and [
+	'}' => 1, # easily confused with ) and ]
+);
+
 our %EXPORT_TAGS = (
 	all	=> [ qw(mkpasswd) ],
 );
 our @EXPORT_OK = @{ $EXPORT_TAGS{all} };
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 our $FATAL = "";
 
 my %keys = (
-	dist	=> {
-		lkeys	=> [ qw(q w e r t a s d f g z x c v b) ],
-		rkeys	=> [ qw(y u i o p h j k l n m) ],
-		lnums	=> [ qw(1 2 3 4 5 6) ],
-		rnums	=> [ qw(7 8 9 0) ],
-		lspec	=> [ qw(! @ $ %), "#" ],
-		rspec	=> [
-			qw(^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /), ","
-		],
-	},
-
-	undist	=> {
-		lkeys	=> [
-			qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-		],
-		rkeys	=> [
-			qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-		],
-		lnums	=> [ qw(0 1 2 3 4 5 6 7 8 9) ],
-		rnums	=> [ qw(0 1 2 3 4 5 6 7 8 9) ],
-		lspec	=> [
-			qw(! @ $ % ~ ^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /),
-			"#", ","
-		],
-		rspec	=> [
-			qw(! @ $ % ~ ^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /),
-			"#", ","
-		],
-	},
+	ALLOWAMBIGUOUS() => {
+		dist => {
+			lkeys	=> [ qw(q w e r t a s d f g z x c v b) ],
+			rkeys	=> [ qw(y u i o p h j k l n m) ],
+			lnums	=> [ qw(1 2 3 4 5 6) ],
+			rnums	=> [ qw(7 8 9 0) ],
+			lspec	=> [ qw(! @ $ %), "#" ],
+			rspec	=> [
+				qw(^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /), ","
+			],
+		},
+		undist => {
+			lkeys	=> [
+				qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+			],
+			lkeys => [
+				qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+			],
+			rkeys	=> [
+				qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+			],
+			lnums	=> [ qw(0 1 2 3 4 5 6 7 8 9) ],
+			rnums	=> [ qw(0 1 2 3 4 5 6 7 8 9) ],
+			lspec	=> [
+				qw(! @ $ % ~ ^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /),
+				"#", ","
+			],
+			rspec	=> [
+				qw(! @ $ % ~ ^ & * ( ) - = _ + [ ] { } \ | ; : ' " < > . ? /),
+				"#", ","
+			],
+		},
+	}
 );
+
+
+# Build unambiguous (NOAMBIGUOUS) keys entries from the ALLOWAMBIGUOUS set
+foreach my $distribution ( keys %{ $keys{ ALLOWAMBIGUOUS() } } ) {
+	foreach my $block ( keys %{ $keys{ ALLOWAMBIGUOUS() }->{ $distribution } } ) {
+		$keys{ NOAMBIGUOUS() }->{ $distribution }->{ $block } = [
+			grep
+				{ ! $IS_AMBIGUOUS{ $_ } }
+				@{ $keys{ ALLOWAMBIGUOUS() }->{ $distribution }->{ $block } }
+		];
+	}
+}
 
 sub mkpasswd {
 	my $class	= shift if UNIVERSAL::isa $_[0], __PACKAGE__;
@@ -75,6 +118,9 @@ sub mkpasswd {
 	my $distribute	= defined $args{"-distribute"}
 		? $args{"-distribute"}
 		: DISTRIBUTE;
+	my $ambiguousity = defined $args{"-noambiguous"}
+		? $args{"-noambiguous"}
+		: ALLOWAMBIGUOUS;
 	my $fatal		= defined $args{"-fatal"}
 		? $args{"-fatal"}
 		: FATAL;
@@ -97,12 +143,12 @@ sub mkpasswd {
 	my $initially_left = my $isleft = int rand 2;
 
 	# Select distribution of keys.
-	my $lkeys = $distribute ? $keys{dist}{lkeys} : $keys{undist}{lkeys};
-	my $rkeys = $distribute ? $keys{dist}{rkeys} : $keys{undist}{rkeys};
-	my $lnums = $distribute ? $keys{dist}{lnums} : $keys{undist}{lnums};
-	my $rnums = $distribute ? $keys{dist}{rnums} : $keys{undist}{rnums};
-	my $lspec = $distribute ? $keys{dist}{lspec} : $keys{undist}{lspec};
-	my $rspec = $distribute ? $keys{dist}{rspec} : $keys{undist}{rspec};
+	my $lkeys = $distribute ? $keys{$ambiguousity}{dist}{lkeys} : $keys{$ambiguousity}{undist}{lkeys};
+	my $rkeys = $distribute ? $keys{$ambiguousity}{dist}{rkeys} : $keys{$ambiguousity}{undist}{rkeys};
+	my $lnums = $distribute ? $keys{$ambiguousity}{dist}{lnums} : $keys{$ambiguousity}{undist}{lnums};
+	my $rnums = $distribute ? $keys{$ambiguousity}{dist}{rnums} : $keys{$ambiguousity}{undist}{rnums};
+	my $lspec = $distribute ? $keys{$ambiguousity}{dist}{lspec} : $keys{$ambiguousity}{undist}{lspec};
+	my $rspec = $distribute ? $keys{$ambiguousity}{dist}{rspec} : $keys{$ambiguousity}{undist}{rspec};
 
 	# Generate password.
 
@@ -259,6 +305,13 @@ the final password.  The default is 1.
 If set to a true value, password characters will be distributed between
 the left- and right-hand sides of the keyboard.  This makes it more
 difficult for an onlooker to see the password as it is typed.  The
+default is false.
+
+=item -noambiguous
+
+If set to a true value, password characters will not include any that
+might be mistaken for others. This is particularly helpful if you're
+distributing a printed list of passwords to a group of people. The
 default is false.
 
 =item -fatal

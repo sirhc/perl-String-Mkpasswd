@@ -62,9 +62,6 @@ my %keys = (
 			],
 		},
 		undist => {
-			lkeys	=> [
-				qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-			],
 			lkeys => [
 				qw(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 			],
@@ -125,7 +122,10 @@ sub mkpasswd {
 		? $args{"-fatal"}
 		: FATAL;
 
-	if ( $minnum + $minlower + $minupper + $minspecial > $length ) {
+	# If there is any underspecification, use additional letters.
+	my $filler = $length - ($minnum + $minupper + $minspecial + $minlower);
+
+	if ( $filler < 0 ) {
 		if ( $fatal || $FATAL ) {
 			croak "Impossible to generate $length-character password with "
 					. "$minnum numbers, $minlower lowercase letters, "
@@ -135,9 +135,6 @@ sub mkpasswd {
 			return;
 		}
 	}
-
-	# If there is any underspecification, use additional lowercase letters.
-	$minlower = $length - ($minnum + $minupper + $minspecial);
 
 	# Choose left or right starting hand.
 	my $initially_left = my $isleft = int rand 2;
@@ -149,6 +146,8 @@ sub mkpasswd {
 	my $rnums = $distribute ? $keys{$ambiguousity}{dist}{rnums} : $keys{$ambiguousity}{undist}{rnums};
 	my $lspec = $distribute ? $keys{$ambiguousity}{dist}{lspec} : $keys{$ambiguousity}{undist}{lspec};
 	my $rspec = $distribute ? $keys{$ambiguousity}{dist}{rspec} : $keys{$ambiguousity}{undist}{rspec};
+	my $lfill = [ @$lkeys, @$lnums, @$lspec, map uc, @$lkeys ];
+	my $rfill = [ @$rkeys, @$rnums, @$rspec, map uc, @$rkeys ];
 
 	# Generate password.
 
@@ -186,6 +185,14 @@ sub mkpasswd {
 	}
 	for ( my $i = 0; $i < $right; $i++ ) {
 		&_insert(\@rpass, $rspec->[rand @$rspec]);
+	}
+
+	($left, $right) = &_psplit($filler, \$isleft);
+	for ( my $i = 0; $i < $left; $i++ ) {
+		&_insert(\@lpass, $lfill->[rand @$lfill]);
+	}
+	for ( my $i = 0; $i < $right; $i++ ) {
+		&_insert(\@rpass, $rfill->[rand @$rfill]);
 	}
 
 	# Merge results together.

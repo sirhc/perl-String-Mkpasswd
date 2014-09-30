@@ -125,7 +125,7 @@ sub mkpasswd {
 	# If there is any underspecification, use additional letters.
 	my $filler = $length - ($minnum + $minupper + $minspecial + $minlower);
 
-	if ( $filler < 0 ) {
+	if ( $filler < 0 or $filler == $length) {
 		if ( $fatal || $FATAL ) {
 			croak "Impossible to generate $length-character password with "
 					. "$minnum numbers, $minlower lowercase letters, "
@@ -146,9 +146,25 @@ sub mkpasswd {
 	my $rnums = $distribute ? $keys{$ambiguousity}{dist}{rnums} : $keys{$ambiguousity}{undist}{rnums};
 	my $lspec = $distribute ? $keys{$ambiguousity}{dist}{lspec} : $keys{$ambiguousity}{undist}{lspec};
 	my $rspec = $distribute ? $keys{$ambiguousity}{dist}{rspec} : $keys{$ambiguousity}{undist}{rspec};
-	my $lfill = [ @$lkeys, @$lnums, @$lspec ];
-	my $rfill = [ @$rkeys, @$rnums, @$rspec ];
-
+	my $lfill = [];
+	my $rfill = [];
+	if( $minnum > 0 ) {
+	    push(@$lfill, @$lnums);
+	    push(@$rfill, @$rnums);
+	}
+	if( $minspecial > 0 ) {
+	    push(@$lfill, @$lspec);
+	    push(@$rfill, @$rspec);
+	}
+	if( $minlower > 0 ) {
+	    push(@$lfill, @$lkeys);
+	    push(@$rfill, @$rkeys);
+	}
+	if( $minupper > 0 ) {
+	    push(@$lfill, map uc, @$lkeys);
+	    push(@$rfill, map uc, @$rkeys);
+	}
+	
 	# Generate password.
 
 	my @lpass = (undef) x $length;	# password chars typed by left hand

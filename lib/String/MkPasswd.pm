@@ -345,7 +345,8 @@ return C<undef> on error.  The default is false.
 =back
 
 If B<-minnum>, B<-minlower>, B<-minupper>, and B<-minspecial> do not add
-up to B<-length>, B<-minlower> will be increased to compensate.
+up to B<-length>, characters from all clases defined with at least 1
+minimum occurence, will be added to compensate.
 However, if B<-minnum>, B<-minlower>, B<-minupper>, and B<-minspecial>
 add up to more than B<-length>, then C<mkpasswd()> will return C<undef>.
 See the section entitled L</"EXCEPTION HANDLING"> for how to change this

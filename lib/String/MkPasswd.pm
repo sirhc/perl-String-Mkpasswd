@@ -2,6 +2,7 @@ package String::MkPasswd;
 
 use 5.006001;
 use strict;
+use warnings;
 use base qw(Exporter);
 
 use Carp qw(croak);

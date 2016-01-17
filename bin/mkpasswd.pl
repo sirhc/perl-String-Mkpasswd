@@ -2,6 +2,7 @@
 
 use 5.006001;
 use strict;
+use warnings;
 
 use File::Basename qw(basename);
 use Getopt::Long qw(GetOptions);

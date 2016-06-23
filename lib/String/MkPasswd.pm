@@ -5,6 +5,7 @@ use strict;
 use base qw(Exporter);
 
 use Carp qw(croak);
+use Math::Random::Secure ();
 
 # Defaults.
 use constant LENGTH		=> 9;
@@ -140,7 +141,7 @@ sub mkpasswd {
 	$minlower = $length - ($minnum + $minupper + $minspecial);
 
 	# Choose left or right starting hand.
-	my $initially_left = my $isleft = int rand 2;
+	my $initially_left = my $isleft = int Math::Random::Secure::rand 2;
 
 	# Select distribution of keys.
 	my $lkeys = $distribute ? $keys{$ambiguousity}{dist}{lkeys} : $keys{$ambiguousity}{undist}{lkeys};
@@ -158,34 +159,34 @@ sub mkpasswd {
 
 	($left, $right) = &_psplit($minnum, \$isleft);
 	for ( my $i = 0; $i < $left; $i++ ) {
-		&_insert(\@lpass, $lnums->[rand @$lnums]);
+		&_insert(\@lpass, $lnums->[Math::Random::Secure::rand @$lnums]);
 	}
 	for ( my $i = 0; $i < $right; $i++ ) {
-		&_insert(\@rpass, $rnums->[rand @$rnums]);
+		&_insert(\@rpass, $rnums->[Math::Random::Secure::rand @$rnums]);
 	}
 
 	($left, $right) = &_psplit($minlower, \$isleft);
 	for ( my $i = 0; $i < $left; $i++ ) {
-		&_insert(\@lpass, $lkeys->[rand @$lkeys]);
+		&_insert(\@lpass, $lkeys->[Math::Random::Secure::rand @$lkeys]);
 	}
 	for ( my $i = 0; $i < $right; $i++ ) {
-		&_insert(\@rpass, $rkeys->[rand @$rkeys]);
+		&_insert(\@rpass, $rkeys->[Math::Random::Secure::rand @$rkeys]);
 	}
 
 	($left, $right) = &_psplit($minupper, \$isleft);
 	for ( my $i = 0; $i < $left; $i++ ) {
-		&_insert(\@lpass, uc $lkeys->[rand @$lkeys]);
+		&_insert(\@lpass, uc $lkeys->[Math::Random::Secure::rand @$lkeys]);
 	}
 	for ( my $i = 0; $i < $right; $i++ ) {
-		&_insert(\@rpass, uc $rkeys->[rand @$rkeys]);
+		&_insert(\@rpass, uc $rkeys->[Math::Random::Secure::rand @$rkeys]);
 	}
 
 	($left, $right) = &_psplit($minspecial, \$isleft);
 	for ( my $i = 0; $i < $left; $i++ ) {
-		&_insert(\@lpass, $lspec->[rand @$lspec]);
+		&_insert(\@lpass, $lspec->[Math::Random::Secure::rand @$lspec]);
 	}
 	for ( my $i = 0; $i < $right; $i++ ) {
-		&_insert(\@rpass, $rspec->[rand @$rspec]);
+		&_insert(\@rpass, $rspec->[Math::Random::Secure::rand @$rspec]);
 	}
 
 	# Merge results together.
@@ -203,7 +204,7 @@ sub _insert {
 
 	my $pos;
 	do {
-		$pos = int rand(1 + @$pass);
+		$pos = int Math::Random::Secure::rand(1 + @$pass);
 	} while ( defined $pass->[$pos] );
 
 	$pass->[$pos] = $char;
